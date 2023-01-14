@@ -14,9 +14,20 @@ builder.Services.AddDbContext<DatabaseContext>(); // veritabaný tablolarýmýzý te
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(x =>
 {
-    x.LoginPath = "/Admin/Login"; // admin controllerda authorize eklediðimizde giriþ yapmayan kullanýcýlarý admin/login sayfasýna yönlendirir
-    x.Cookie.Name = "AdminLogin";
+    x.LoginPath = "/Admin/Login";
+    x.AccessDeniedPath = "/AccessDenied"; // Giriþ yapan kullanýcýnýn admin yetkisi yoksa AccessDenied sayfasýna yönlendir.
+    x.LogoutPath = "/Admin/Login/Logout";
+    x.Cookie.Name = "Administrator"; // Oluþacak cookie nin adý
+    x.Cookie.MaxAge = TimeSpan.FromDays(1);
 });
+
+builder.Services.AddAuthorization(x =>
+{
+    x.AddPolicy("AdminPolicy", policy => policy.RequireClaim("Role", "Admin"));
+    x.AddPolicy("UserPolicy", policy => policy.RequireClaim("Role", "User"));
+
+});
+
 
 builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddTransient(typeof(IService<>), typeof(Service<>));

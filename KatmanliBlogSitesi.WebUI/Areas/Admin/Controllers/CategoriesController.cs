@@ -1,10 +1,11 @@
 ﻿using KatmanliBlogSitesi.Entities;
 using KatmanliBlogSitesi.Service.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace KatmanliBlogSitesi.WebUI.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"),Authorize]
     public class CategoriesController : Controller
     {
         private readonly IService<Category> _service;

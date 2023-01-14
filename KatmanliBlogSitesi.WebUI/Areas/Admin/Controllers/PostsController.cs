@@ -1,12 +1,14 @@
 ﻿using KatmanliBlogSitesi.Data;
 using KatmanliBlogSitesi.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace KatmanliBlogSitesi.WebUI.Areas.Admin.Controllers
 {
-    [Area("Admin")]
+    [Area("Admin"), Authorize]
+
     public class PostsController : Controller
     {
         private readonly DatabaseContext _context;
