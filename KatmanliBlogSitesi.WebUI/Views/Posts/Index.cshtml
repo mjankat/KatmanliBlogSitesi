@@ -1,14 +1,14 @@
-﻿@model IEnumerable<Post>
+﻿
 
 @{
-    ViewData["Title"] = "Anasayfa";
+    ViewData["Title"] = "Blog İçerikleri";
 }
 
 <header class="py-5 bg-light border-bottom mb-4">
     <div class="container">
         <div class="text-center my-5">
             <h1 class="fw-bolder">Blog Siteme Hoşgeldiniz!</h1>
-            <p class="lead mb-0">Yakında hizmetinizdeyiz.</p>
+            <p class="lead mb-0">Tüm Blog Gönderileri.</p>
         </div>
     </div>
 </header>
@@ -18,7 +18,7 @@
     {
         <div class="col-lg-4">
             <div class="card mb-4">
-                <a href="/Posts/Detail/@item.Id"><img class="card-img-top" src="/Img/@item.Image" style="height:276px" alt="@item.Image"></a>
+                <a href="/Posts/Detail/@item.Id"><img class="card-img-top" src="/Img/@item.Image" alt="@item.Image"></a>
                 <div class="card-body">
                     <div class="small text-muted">@item.CreateDate</div>
                     <h2 class="card-title h4">@item.Name</h2>
@@ -29,5 +29,5 @@
         </div>
 
     }
-   
+
 </div>

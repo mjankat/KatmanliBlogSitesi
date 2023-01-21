@@ -25,41 +25,46 @@ namespace KatmanliBlogSitesi.WebUI.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("Admin/Logout")] 
+        [Route("Admin/Logout")]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync(); 
-            return Redirect("/Admin/Login"); 
+            await HttpContext.SignOutAsync();
+            return Redirect("/Admin/Login");
         }
 
 
         [HttpPost]
         public async Task<IActionResult> IndexAsync(LoginViewModel loginViewModel)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var kullanici = await _service.FirstOrDefaultAsync(k => k.Email==loginViewModel.Email && k.Password == loginViewModel.Password && k.IsActive );
-                if (kullanici != null)
+
+
+                try
                 {
-                    var haklar = new List<Claim>() 
+                    var kullanici = await _service.FirstOrDefaultAsync(k => k.Email == loginViewModel.Email && k.Password == loginViewModel.Password && k.IsActive);
+                    if (kullanici != null)
+                    {
+                        var haklar = new List<Claim>()
                     {
                         new Claim(ClaimTypes.Name,kullanici.Name),
                         new Claim("Role",kullanici.IsAdmin ? "Admin" : "User"),
                         new Claim("UserId",kullanici.Id.ToString())
                     };
-                    var kullaniciKimligi = new ClaimsIdentity(haklar, CookieAuthenticationDefaults.AuthenticationScheme);
-                    ClaimsPrincipal principal = new(kullaniciKimligi);
-                    await HttpContext.SignInAsync(principal);
-                    return Redirect("/Admin/Main");
+                        var kullaniciKimligi = new ClaimsIdentity(haklar, CookieAuthenticationDefaults.AuthenticationScheme);
+                        ClaimsPrincipal principal = new(kullaniciKimligi);
+                        await HttpContext.SignInAsync(principal);
+                        return Redirect("/Admin/");
+                    }
+                    else TempData["Mesaj"] = "Giriş Başarısız!";
                 }
-                else TempData["Mesaj"] = "Giriş Başarısız!";
-            }
-            catch (Exception)
-            {
-                TempData["Mesaj"] = "Hata Oluştu!";
+                catch (Exception)
+                {
+                    TempData["Mesaj"] = "Hata Oluştu!";
 
+                }
             }
-            return View();
+            return View(loginViewModel);
         }
 
     }
